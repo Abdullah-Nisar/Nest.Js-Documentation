@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, HttpException, BadRequestException, UseFilters, ForbiddenException, ParseIntPipe, Query, UsePipes } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, HttpException, BadRequestException, UseFilters, ForbiddenException, ParseIntPipe, Query, UsePipes, UseGuards, SetMetadata } from '@nestjs/common';
 import { CatsService } from './cats.service';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { UpdateCatDto } from './dto/update-cat.dto';
@@ -7,12 +7,23 @@ import { HttpExceptionFilter } from 'src/http-exception.filter';
 import { JoiValidationPipe } from 'src/joi-validation.pipe';
 import { createCatSchema } from 'src/cats/dto/cat.dto';
 import { ValidationPipe } from 'src/validation.pipe';
+import { RolesGuard } from 'src/role.guard';
+import { Roles } from 'src/role.decorator';
 
 // import {Response} from 'express';
 
 
 @Controller('cats')
-@UseFilters(new HttpExceptionFilter())
+// @UseFilters(new HttpExceptionFilter())
+
+// Scoped Guards: Limited to Controller in this context
+@UseGuards( new RolesGuard)
+
+//assigning metadata of a role to a class
+// @SetMetadata('roles', ['admin'])
+
+//custom roles decorator to assign metadata of a role to a class
+@Roles('admin')
 export class CatsController {
   constructor(private catsService: CatsService) {}
 

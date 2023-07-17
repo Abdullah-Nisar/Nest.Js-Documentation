@@ -1,14 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, HttpException, BadRequestException, UseFilters, ForbiddenException, ParseIntPipe, Query, UsePipes, UseGuards, SetMetadata } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, HttpException, BadRequestException, UseFilters, ForbiddenException, ParseIntPipe, Query, UsePipes, UseGuards, SetMetadata, UseInterceptors } from '@nestjs/common';
 import { CatsService } from './cats.service';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { UpdateCatDto } from './dto/update-cat.dto';
 import {Cat} from './interfaces/cat.interface';
-import { HttpExceptionFilter } from 'src/http-exception.filter';
-import { JoiValidationPipe } from 'src/joi-validation.pipe';
+import { HttpExceptionFilter } from 'src/1. Overall/Exceptions Filter/http-exception.filter';
+import { JoiValidationPipe } from 'src/1. Overall/Pipes/joi-validation.pipe';
 import { createCatSchema } from 'src/cats/dto/cat.dto';
-import { ValidationPipe } from 'src/validation.pipe';
-import { RolesGuard } from 'src/role.guard';
-import { Roles } from 'src/role.decorator';
+import { ValidationPipe } from 'src/1. Overall/Pipes/validation.pipe';
+import { RolesGuard } from 'src/1. Overall/Guards//role.guard';
+import { Roles } from 'src/1. Overall/Guards/role.decorator';
+import { LoggingInterceptor } from 'src/1. Overall/Interceptors/logging.interceptor';
 
 // import {Response} from 'express';
 
@@ -24,6 +25,9 @@ import { Roles } from 'src/role.decorator';
 
 //custom roles decorator to assign metadata of a role to a class
 @Roles('admin')
+
+//Binding Class interceptor
+@UseInterceptors(LoggingInterceptor)
 export class CatsController {
   constructor(private catsService: CatsService) {}
 

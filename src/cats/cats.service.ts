@@ -1,9 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, Scope } from '@nestjs/common';
 import { UpdateCatDto } from './dto/update-cat.dto';
 import { Cat } from './interfaces/cat.interface';
+import { REQUEST } from '@nestjs/core';
 
-@Injectable()
+//here, we want to access the reference of the request object, so we will inject REQUEST object.
+//for the GraphQL applications we use, context instead of request object.
+
+@Injectable({ scope: Scope.REQUEST})
 export class CatsService {
+  //accessing the request object
+  constructor(@Inject(REQUEST) private request: Request) {}
   private readonly cats: Cat[] = [];
 
   create(cat: Cat) {

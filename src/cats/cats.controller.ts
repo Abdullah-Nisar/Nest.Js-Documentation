@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, HttpException, BadRequestException, UseFilters, ForbiddenException, ParseIntPipe, Query, UsePipes, UseGuards, SetMetadata, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, HttpException, BadRequestException, UseFilters, ForbiddenException, ParseIntPipe, Query, UsePipes, UseGuards, SetMetadata, UseInterceptors, Scope } from '@nestjs/common';
 import { CatsService } from './cats.service';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { UpdateCatDto } from './dto/update-cat.dto';
@@ -13,8 +13,16 @@ import { LoggingInterceptor } from 'src/1. Overall/Interceptors/logging.intercep
 
 // import {Response} from 'express';
 
+//Injection's scope is default by default. Which means it's a singleton.
+//To make a custom injection scope to be a singleton, we need to use @Injectable({scope: Scope.DEFAULT}).
 
-@Controller('cats')
+//Just as Injections have scope, so do Controllers, Guards, Filters, Interceptors, and Pipes.
+//here is how you define the scope of a controller
+
+@Controller({ path: 'cats', scope: Scope.REQUEST })
+
+// @Controller('cats')
+
 // @UseFilters(new HttpExceptionFilter())
 
 // Scoped Guards: Limited to Controller in this context
